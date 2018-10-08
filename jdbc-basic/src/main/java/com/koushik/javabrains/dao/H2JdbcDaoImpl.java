@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -84,6 +85,11 @@ public class H2JdbcDaoImpl {
 		String sql = "select * from circle where id = ?";
 		Circle circle = jdbcTemplate.queryForObject(sql, new Object[] {circleId}, new CircleMapper());
 		return circle;
+	}
+	
+	public List<Circle> getAllCircles(){
+		String sql = "select * from circle";
+		return jdbcTemplate.query(sql, new CircleMapper());
 	}
 
 	private static final class CircleMapper implements RowMapper<Circle>{
