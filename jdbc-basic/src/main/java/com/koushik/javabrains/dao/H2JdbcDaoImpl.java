@@ -1,23 +1,37 @@
 package com.koushik.javabrains.dao;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+
+import org.h2.tools.Server;
 
 import com.koushik.javabrains.model.Circle;
 
-public class JdbcDaoImpl {
+public class H2JdbcDaoImpl {
 
 	public Circle getCircle(int circleId) {
 		Connection conn = null;
-
-		String driver = "com.mysql.cj.jdbc.Driver";
+		Server server = null;
+		String driver = "org.h2.Driver";
 
 		try {
 			Class.forName(driver).newInstance();
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/infiniteskills", "root", "admin");
+			conn = DriverManager.getConnection("jdbc:h2:./Database/testdb", "sa", "");
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			br.read();
+            // create Statement object
+			Statement stmt = conn.createStatement();
+                 // send sql command
+			stmt.executeUpdate("create table CIRCLE (ID integer, name char(50))");
+			stmt = conn.createStatement();
+            // send sql command
+			stmt.executeUpdate("insert into CIRCLE values(1, 'First Circle')");
 			PreparedStatement ps = conn.prepareStatement("select * from circle where id = ?");
 			ps.setInt(1, circleId);
 
@@ -33,6 +47,7 @@ public class JdbcDaoImpl {
 
 			return circle;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		}
 		finally {
