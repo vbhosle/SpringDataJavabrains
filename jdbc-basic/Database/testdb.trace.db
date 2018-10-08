@@ -4,3 +4,9 @@ create table CIRCLE (ID integer, name char(50)) [42101-197]
 2018-10-08 11:42:46 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLException: Table "CIRCLE" already exists; SQL statement:
 create table CIRCLE (ID integer, name char(50)) [42101-197]
+2018-10-08 12:47:50 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "DELETE *[*] FROM CIRCLE "; expected "identifier"; SQL statement:
+delete * from circle [42001-197]
+2018-10-08 12:47:57 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "DELETE *[*] FROM CIRCLE "; expected "identifier"; SQL statement:
+delete * from circle [42001-197]

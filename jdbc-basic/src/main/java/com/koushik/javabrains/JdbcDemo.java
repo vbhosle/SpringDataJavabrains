@@ -1,6 +1,8 @@
 package com.koushik.javabrains;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import org.h2.tools.Server;
 import org.springframework.context.ApplicationContext;
@@ -19,12 +21,13 @@ public class JdbcDemo {
 			//get the h2 console url
 			Server server = context.getBean("h2WebServer", Server.class);
 			System.out.println(server.getURL());
-			
 			//get DAO
 			H2JdbcDaoImpl dao = context.getBean("h2JdbcDaoImpl", H2JdbcDaoImpl.class);
 			Circle circle = dao.getCircle(1);
 			System.out.println(circle.getName());
 			System.out.println(dao.getCircleCount());
+			System.out.println(dao.getCircleName(1));
+			System.out.println(dao.getCircleById(1).getName());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
