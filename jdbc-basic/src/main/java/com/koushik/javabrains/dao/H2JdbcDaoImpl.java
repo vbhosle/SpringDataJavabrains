@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 
 import org.h2.tools.Server;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.koushik.javabrains.model.Circle;
@@ -20,6 +21,8 @@ public class H2JdbcDaoImpl {
 
 	@Autowired
 	private DataSource dataSource;
+	
+	private JdbcTemplate jdbcTemplate;
 	
 	public Circle getCircle(int circleId) {
 		Connection conn = null;
@@ -61,13 +64,17 @@ public class H2JdbcDaoImpl {
 		}
 
 	}
-
-	public DataSource getDataSource() {
-		return dataSource;
+	
+	public int getCircleCount() {
+		String sql = "select count(*) from circle";
+		Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
+		return count;
 	}
 
+	@Autowired
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
 	

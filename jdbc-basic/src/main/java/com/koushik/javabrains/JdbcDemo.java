@@ -24,6 +24,7 @@ public class JdbcDemo {
 			H2JdbcDaoImpl dao = context.getBean("h2JdbcDaoImpl", H2JdbcDaoImpl.class);
 			Circle circle = dao.getCircle(1);
 			System.out.println(circle.getName());
+			System.out.println(dao.getCircleCount());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
