@@ -22,53 +22,50 @@ import com.koushik.javabrains.model.Circle;
 
 @Component
 public class H2JdbcDaoImpl {
-
-	@Autowired
-	private DataSource dataSource;
 	
 	private JdbcTemplate jdbcTemplate;
 	
-	public Circle getCircle(int circleId) {
-		Connection conn = null;
-		Server server = null;
-
-		try {
-			conn = dataSource.getConnection();
-			// create Statement object
-			Statement stmt = conn.createStatement();
-			
-			// // send sql command
-			// stmt.executeUpdate("create table CIRCLE (ID integer, name char(50))");
-			// stmt = conn.createStatement();
-			// send sql command
-			//stmt.executeUpdate("insert into CIRCLE values(1, 'First Circle')");
-			PreparedStatement ps = conn.prepareStatement("select * from circle where id = ?");
-			ps.setInt(1, circleId);
-
-			Circle circle = null;
-			ResultSet rs = ps.executeQuery();
-
-			if (rs.next()) {
-				circle = new Circle(circleId, rs.getString("name"));
-			}
-
-			rs.close();
-			ps.close();
-
-			return circle;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new RuntimeException(ex);
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
-	
+//	public Circle getCircle(int circleId) {
+//		Connection conn = null;
+//		Server server = null;
+//
+//		try {
+//			conn = dataSource.getConnection();
+//			// create Statement object
+//			Statement stmt = conn.createStatement();
+//			
+//			// // send sql command
+//			// stmt.executeUpdate("create table CIRCLE (ID integer, name char(50))");
+//			// stmt = conn.createStatement();
+//			// send sql command
+//			//stmt.executeUpdate("insert into CIRCLE values(1, 'First Circle')");
+//			PreparedStatement ps = conn.prepareStatement("select * from circle where id = ?");
+//			ps.setInt(1, circleId);
+//
+//			Circle circle = null;
+//			ResultSet rs = ps.executeQuery();
+//
+//			if (rs.next()) {
+//				circle = new Circle(circleId, rs.getString("name"));
+//			}
+//
+//			rs.close();
+//			ps.close();
+//
+//			return circle;
+//		} catch (Exception ex) {
+//			ex.printStackTrace();
+//			throw new RuntimeException(ex);
+//		} finally {
+//			try {
+//				conn.close();
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//
+//	}
+//	
 	public int getCircleCount() {
 		String sql = "select count(*) from circle";
 		Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
@@ -91,6 +88,11 @@ public class H2JdbcDaoImpl {
 		String sql = "select * from circle";
 		return jdbcTemplate.query(sql, new CircleMapper());
 	}
+	
+	public void insertCircle(Circle circle) {
+		String sql = "insert into circle values(?,?)";
+		jdbcTemplate.update(sql, new Object[] {circle.getId(), circle.getName()});
+	}
 
 	private static final class CircleMapper implements RowMapper<Circle>{
 
@@ -102,7 +104,6 @@ public class H2JdbcDaoImpl {
 	
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
