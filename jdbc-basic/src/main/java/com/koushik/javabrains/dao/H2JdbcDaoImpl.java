@@ -93,6 +93,11 @@ public class H2JdbcDaoImpl {
 		String sql = "insert into circle values(?,?)";
 		jdbcTemplate.update(sql, new Object[] {circle.getId(), circle.getName()});
 	}
+	
+	public void createTriangleTable() {
+		String sql = "create table triangle(id integer, name varchar(50))";
+		jdbcTemplate.execute(sql);
+	}
 
 	private static final class CircleMapper implements RowMapper<Circle>{
 
